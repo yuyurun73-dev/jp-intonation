@@ -1,0 +1,11 @@
+#!/bin/bash
+# jp-intonation の入口。初回だけ専用venvを作る（parselmouth / pyopenjtalk-plus / numpy / matplotlib）
+set -e
+VENV="$HOME/.local/share/jp-intonation/venv"
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+if [ ! -x "$VENV/bin/python" ]; then
+  mkdir -p "$(dirname "$VENV")"
+  uv venv -q --python 3.13 "$VENV"
+  VIRTUAL_ENV="$VENV" uv pip install -q praat-parselmouth pyopenjtalk-plus numpy matplotlib
+fi
+exec "$VENV/bin/python" "$HERE/jpi.py" "$@"
